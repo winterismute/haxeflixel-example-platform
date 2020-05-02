@@ -1,5 +1,7 @@
 # haxeflixel-example-platform
+
 ![Imgur](https://i.imgur.com/9tZ6GJd.gif)
+
 ## IT
 Contenuto:
 * "live": il progetto sviluppato duarante la [live sul canale Crystal Bit](https://www.youtube.com/watch?v=8TqLoMeL3ls)
