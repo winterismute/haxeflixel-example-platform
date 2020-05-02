@@ -1,6 +1,6 @@
 # haxeflixel-example-platform
 
-![Imgur](https://i.imgur.com/a36vnPP.gif)
+![](http://winterismute.com/optimized.gif)
 
 ## IT
 Contenuto:
