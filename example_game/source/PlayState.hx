@@ -167,7 +167,7 @@ class PlayState extends FlxState
 		player.maxVelocity.x = 160;
 	}
 
-	private function onPlayerFloorOverlap(pl:FlxObject, f:FlxObject):Void
+	private function onPlayerOutOfLevel(pl:FlxObject = null, f:FlxObject = null):Void
 	{
 		endOfTrail();
 		setGameOver();
@@ -176,8 +176,25 @@ class PlayState extends FlxState
 	private function onPlayerGoalOverlap(pl:FlxObject, g:FlxObject):Void
 	{
 		endOfTrail();
+		filters.remove(invertFilter);
 		maxTime -= 1.0;
 		FlxG.resetState();
+	}
+
+	private function invertWorld():Void
+	{
+		if (filters.length > 0)
+		{
+			filters.remove(invertFilter);
+			goal.visible = false;
+			goal.exists = false;
+		}
+		else
+		{
+			filters.push(invertFilter);
+			goal.visible = true;
+			goal.exists = true;
+		}
 	}
 
 	private function onPlayerSpecialCoinOverlap(pl:FlxObject, sc:FlxObject):Void
@@ -187,7 +204,6 @@ class PlayState extends FlxState
 		shakeAmount += 0.10;
 		currentScore += 300;
 		scoreText.text = "SCORE: " + currentScore;
-
 		// Turn on trail
 		playerEffect.setPosition(player.x, player.y);
 		trailEffect.active = true;
@@ -205,19 +221,8 @@ class PlayState extends FlxState
 		shakeAmount += 0.005;
 		currentScore += 100;
 		scoreText.text = "SCORE: " + currentScore;
-
-		if (filters.length > 0)
-		{
-			filters.remove(invertFilter);
-			goal.visible = false;
-			goal.exists = false;
-		}
-		else
-		{
-			filters.push(invertFilter);
-			goal.visible = true;
-			goal.exists = true;
-		}
+		// Invert
+		invertWorld();
 	}
 
 	override public function update(elapsed:Float):Void
@@ -262,7 +267,11 @@ class PlayState extends FlxState
 			FlxG.overlap(player, specialCoin, onPlayerSpecialCoinOverlap);
 			FlxG.overlap(player, coins, onPlayerCoinOverlap);
 			FlxG.overlap(player, goal, onPlayerGoalOverlap);
-			FlxG.overlap(player, level.floor, onPlayerFloorOverlap);
+			// FlxG.overlap(player, level.floor, onPlayerOutOfLevel);
+		}
+		if (player.y > level.fullHeight)
+		{
+			onPlayerOutOfLevel();
 		}
 
 		if (shakeAmount > 0.0)
